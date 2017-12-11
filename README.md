@@ -2,28 +2,29 @@
 
 ## Server/App Info
 
-IP address: 35.176.97.167
+IP address: 35.176.22.51
 
 SSH port: 2200.
 
-Username for Udacity reviewer: `grader`
+Username for Udacity reviewer: `udacity`
 
-## Configurations in Steps
 
-### 1 - Launching an LightSail AWS and connect to it via SSH
+### 1 - Create an Lightsail Instance, a static IP and get the ssh key
+1. Create an instance of Ubuntu in Lihtsail
+2. Link a static IP to ubuntu instance
+3. Download the private key `udacity.pem` 
 
-1. Download the private key `udacity.pem` from AWS
 
 ### 2 - User, SSH and Security Configurations
 
 1. Log into the remote VM as *root* user (`ubuntu`) through ssh: `$ ssh -i "udacity.pem" ubuntu@35.176.97.167`.
-2. Create a new user *grader*:  `$ sudo adduser grader`.
-3. Grant udacity the permission to sudo, by adding a new file under the suoders directory: `$ sudo nano /etc/sudoers.d/grader`. In the file put in: `grader ALL=(ALL:ALL) ALL`, then save and quit.
-4. Generate an encryption key pair with: `$ ssh-keygen -f /home/grader/.ssh/id_rsa`
+2. Create a new user *udacity*:  `$ sudo adduser udacity`.
+3. Grant udacity the permission to sudo, by adding a new file under the suoders directory: `$ sudo nano /etc/sudoers.d/udacity`. In the file put in: `udacity ALL=(ALL:ALL) ALL`, then save and quit.
+4. Generate an encryption key pair with: `$ ssh-keygen -f /home/udacity/.ssh/id_rsa`
 5. Rename the public key `id_rsa.pub` to `authorized_keys`, and change the permissions:
-	1. `$ sudo chmod 700 /home/grader/.ssh`.
-	2. `$ sudo chmod 644 /home/grader/.ssh/authorized_keys`.
-	3. Change the owner from `ubuntu` to `grader`: `$ sudo chown -R grader:grader /home/grader/.ssh`
+	1. `$ sudo chmod 700 /home/udacity/.ssh`.
+	2. `$ sudo chmod 644 /home/udacity/.ssh/authorized_keys`.
+	3. Change the owner from `ubuntu` to `udacity`: `$ sudo chown -R udacity:udacity /home/udacity/.ssh`
 6. Copy the private key `id_rsa.rsa` to *local machine* for udacity reviewer
 7. Enforce key-based authentication, change SSH port to `2200` and disable remote login of *root* user:
    1. `$ sudo nano /etc/ssh/sshd_config`  
@@ -71,7 +72,7 @@ Project requirements need the server to only allow incoming connections for SSH 
    ```
    $ cd /var/www
    $ sudo mkdir catalog
-   $ sudo chown -R grader:grader catalog
+   $ sudo chown -R udacity:udacity catalog
    $ cd /catalog
    $ git clone https://github.com/jacoboAR/item-catalog.git catalog
    ```
@@ -101,7 +102,7 @@ Project requirements need the server to only allow incoming connections for SSH 
    ```
    <VirtualHost *:80>
        ServerName 35.176.97.167
-       ServerAdmin grader@35.176.97.167
+       ServerAdmin udacity@35.176.97.167
        WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/site-packages
        WSGIProcessGroup catalog
        WSGIScriptAlias / /var/www/catalog/catalog.wsgi
